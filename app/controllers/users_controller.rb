@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:edit, :update, :show]
   before_action :require_same_user, only: [:edit, :update]
+
   def new
     @user = User.new
   end
@@ -9,7 +10,9 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     if @user.save
       flash[:success] = "Signed up successfully. Welcome!"
-      redirect_to articles_path
+      #sign in on sign up
+      session[:user_id] = @user.id
+      redirect_to user_path(@user)
     else
       render 'new'
     end
